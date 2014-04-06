@@ -1,0 +1,49 @@
+ __      ___          ___      __  __         ___                     _             ___ _            ___ 
+ \ \    / / |_ _  _  |_ _|___ |  \/  |_  _   / __|___ _ __  _ __ _  _| |_ ___ _ _  / __| |_____ __ _|__ \
+  \ \/\/ /| ' \ || |  | |(_-< | |\/| | || | | (__/ _ \ '  \| '_ \ || |  _/ -_) '_| \__ \ / _ \ V  V / /_/
+   \_/\_/ |_||_\_, | |___/__/ |_|  |_|\_, |  \___\___/_|_|_| .__/\_,_|\__\___|_|   |___/_\___/\_/\_/ (_) 
+               |__/                   |__/                 |_|                                           
+
+
+CONTENTS OF THIS FILE
+---------------------
+ * Introduction
+ * Requirements
+ * Installation
+ * Configuration
+ * Todo
+ * Maintainers
+ 
+INTRODUCTION
+------------
+This application's main focus is to tell the user why his/her computer
+is slow. By showing the user statistics, graphs, and data about all
+the resources and how much is in use while running the program.
+
+REQUIREMENTS
+------------
+* Windows 7
+
+INSTALLATION
+------------
+The installer will be available when the application comes to the 
+beta stage.
+
+CONFIGURATION
+-------------
+To configure WIMCS, open the application and choose "Edit" -> 
+"Preferences".
+
+TODO
+----
+* Show hd info
+* Show memory info
+* Show CPU info
+* Show running processes
+* Show services
+* Show application in startup
+* Check if the user has ssd or hdd
+
+MAINTAINERS
+-----------
+Patchie
