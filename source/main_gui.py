@@ -23,29 +23,29 @@ class MainFrame ( wx.Frame ):
 		
 		self.m_menubar = wx.MenuBar( 0 )
 		self.m_menu_File = wx.Menu()
-		self.m_menuItem_Refresh = wx.MenuItem( self.m_menu_File, wx.ID_ANY, u"Refresh", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_Refresh = wx.MenuItem( self.m_menu_File, wx.ID_ANY, u"Refresh"+ u"\t" + u"F5", u"This option refreshes the data", wx.ITEM_NORMAL )
 		self.m_menu_File.AppendItem( self.m_menuItem_Refresh )
 		
 		self.m_menu_File.AppendSeparator()
 		
-		self.m_menuItem_Exit = wx.MenuItem( self.m_menu_File, wx.ID_ANY, u"Exit", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_Exit = wx.MenuItem( self.m_menu_File, wx.ID_ANY, u"Exit", u"Close application", wx.ITEM_NORMAL )
 		self.m_menu_File.AppendItem( self.m_menuItem_Exit )
 		
 		self.m_menubar.Append( self.m_menu_File, u"File" ) 
 		
 		self.m_menu_Edit = wx.Menu()
-		self.m_menuItem_Preferences = wx.MenuItem( self.m_menu_Edit, wx.ID_ANY, u"Preferences", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_Preferences = wx.MenuItem( self.m_menu_Edit, wx.ID_ANY, u"Preferences", u"Edit settings for this application", wx.ITEM_NORMAL )
 		self.m_menu_Edit.AppendItem( self.m_menuItem_Preferences )
 		
 		self.m_menubar.Append( self.m_menu_Edit, u"Edit" ) 
 		
 		self.m_menu_Help = wx.Menu()
-		self.m_menuItem_HelpContents = wx.MenuItem( self.m_menu_Help, wx.ID_ANY, u"Help Contents", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_HelpContents = wx.MenuItem( self.m_menu_Help, wx.ID_ANY, u"Help Contents"+ u"\t" + u"F1", u"Read our helpfile", wx.ITEM_NORMAL )
 		self.m_menu_Help.AppendItem( self.m_menuItem_HelpContents )
 		
 		self.m_menu_Help.AppendSeparator()
 		
-		self.m_menuItem_About = wx.MenuItem( self.m_menu_Help, wx.ID_ANY, u"About", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_About = wx.MenuItem( self.m_menu_Help, wx.ID_ANY, u"About", u"Want to know more about us?", wx.ITEM_NORMAL )
 		self.m_menu_Help.AppendItem( self.m_menuItem_About )
 		
 		self.m_menubar.Append( self.m_menu_Help, u"Help" ) 
@@ -291,8 +291,32 @@ class MainFrame ( wx.Frame ):
 		self.Layout()
 		
 		self.Centre( wx.BOTH )
+		
+		# Connect Events
+		self.Bind( wx.EVT_MENU, self.menu_refresh, id = self.m_menuItem_Refresh.GetId() )
+		self.Bind( wx.EVT_MENU, self.menu_exit, id = self.m_menuItem_Exit.GetId() )
+		self.Bind( wx.EVT_MENU, self.menu_preferences, id = self.m_menuItem_Preferences.GetId() )
+		self.Bind( wx.EVT_MENU, self.menu_help, id = self.m_menuItem_HelpContents.GetId() )
+		self.Bind( wx.EVT_MENU, self.menu_about, id = self.m_menuItem_About.GetId() )
 	
 	def __del__( self ):
 		pass
+	
+	
+	# Virtual event handlers, overide them in your derived class
+	def menu_refresh( self, event ):
+		event.Skip()
+	
+	def menu_exit( self, event ):
+		event.Skip()
+	
+	def menu_preferences( self, event ):
+		event.Skip()
+	
+	def menu_help( self, event ):
+		event.Skip()
+	
+	def menu_about( self, event ):
+		event.Skip()
 	
 

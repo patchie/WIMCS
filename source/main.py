@@ -8,7 +8,8 @@ import wmi          # Imports the python Windows Management Instrumentation libr
 #---------------------------------------------------------------
 #| MISC                                                        |
 #---------------------------------------------------------------
-def prettify_kb(kbytes):              # Convert bytes to the correct unit
+def prettify_kb(kbytes):                # Convert bytes to the correct unit
+
     kbytes = float(kbytes)
     if kbytes >= 1073741824:
         size = '%.1fTiB' % (kbytes / 1073741824)
@@ -25,20 +26,23 @@ def prettify_kb(kbytes):              # Convert bytes to the correct unit
 #---------------------------------------------------------------
 class Main_gui_window(main_gui.MainFrame):
     def __init__(self, parent):
-        main_gui.MainFrame.__init__(self,parent)
+        main_gui.MainFrame.__init__(self, parent)
 
-    def Menu_Refresh(self, event):
+    def menu_refresh(self, event):
         WIMCS.SetTitle("test22222222")
         WIMCS.SetStatusText("hehehe22222222222")
-        Computer_Scan()
+        computer_scan()
+
+    def menu_exit(self, event):
+        self.Close()
 
 
 #---------------------------------------------------------------
 #| Starting the scan                                           |
 #---------------------------------------------------------------
-def Computer_Scan():
+def computer_scan():
     c = wmi.WMI()   # Running scan on local computer
-    
+
     for os in c.Win32_OperatingSystem():
         for disk in c.Win32_LogicalDisk(["FreeSpace", "Size", "DriveType"], DriveType=3, DeviceID=os.SystemDrive):
             HdTotalValue = prettify_kb(float(disk.Size)/1024)                               # The disk.Size value comes in bytes, converts to kb before sending
@@ -57,10 +61,9 @@ def Computer_Scan():
             #print "freeramkb*2: ", prettify_kb(float(os.FreePhysicalMemory) * 2)
         ramtotalkb = float(os.TotalVisibleMemorySize)
             #print "ramtotalkb: ", prettify_kb(float(os.TotalVisibleMemorySize))
-        if ((swapusedkb > (ramfreekb*2)) and (swapusedkb > (ramtotalkb/100))):
+        if (swapusedkb > (ramfreekb*2)) and (swapusedkb > (ramtotalkb/100)):
             print "hehe"
         wx.MessageBox('You use more swap memory then free physical memory.\nThis can cause a slow computer.\n\nYou can solve this problem by closing programs and releasing more memory.', 'Swap memory error!', wx.OK | wx.ICON_ERROR)
-
 
 
     WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)  # m_staticText_HdTotalValue
@@ -77,11 +80,6 @@ def Computer_Scan():
     #WIMCS.m_staticText_CPULoadValue.SetLabel()    # m_staticText_CPULoadValue
     #WIMCS.m_staticText_CPUTempValue.SetLabel()    # m_staticText_CPUTempValue
 
-        
-    
-
-
-
 #---------------------------------------------------------------
 #| Initialize                                                  |
 #---------------------------------------------------------------
@@ -90,6 +88,5 @@ if __name__ == '__main__':
     WIMCS = Main_gui_window(None)
     WIMCS.SetTitle("WIMCS v0.01 Alpha")
     WIMCS.SetStatusText("Scanning computer...")
-    WIMCS.Show()                    #Shows the window
-    app.MainLoop()                  #Starts the application loop
-
+    WIMCS.Show()                    # Shows the window
+    app.MainLoop()                  # Starts the application loop
