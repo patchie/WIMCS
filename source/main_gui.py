@@ -320,3 +320,66 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 	
 
+###########################################################################
+## Class MyDialog_About
+###########################################################################
+
+class MyDialog_About ( wx.Dialog ):
+	
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"About", pos = wx.DefaultPosition, size = wx.Size( 331,247 ), style = wx.DEFAULT_DIALOG_STYLE )
+		
+		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+		
+		bSizer3 = wx.BoxSizer( wx.VERTICAL )
+		
+		self.m_panel6 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		fgSizer6 = wx.FlexGridSizer( 5, 1, 0, 0 )
+		fgSizer6.AddGrowableRow( 3 )
+		fgSizer6.SetFlexibleDirection( wx.BOTH )
+		fgSizer6.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_ALL )
+		
+		self.m_bitmap1 = wx.StaticBitmap( self.m_panel6, wx.ID_ANY, wx.Bitmap( u"../Resources/Icon/Large_icon.png", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer6.Add( self.m_bitmap1, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		
+		self.m_staticText30 = wx.StaticText( self.m_panel6, wx.ID_ANY, u"Why Is My Computer Slow?", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText30.Wrap( -1 )
+		self.m_staticText30.SetFont( wx.Font( 16, 74, 90, 92, False, "Arial" ) )
+		
+		fgSizer6.Add( self.m_staticText30, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		self.m_staticText31 = wx.StaticText( self.m_panel6, wx.ID_ANY, u"Version x.x", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText31.Wrap( -1 )
+		fgSizer6.Add( self.m_staticText31, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM|wx.LEFT|wx.RIGHT, 5 )
+		
+		self.m_staticText32 = wx.StaticText( self.m_panel6, wx.ID_ANY, u"This application's main focus is to tell the user why his/her computer is slow. By showing the user statistics, graphs, and data about all the resources and how much is in use while running the program.", wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
+		self.m_staticText32.Wrap( 300 )
+		fgSizer6.Add( self.m_staticText32, 0, wx.ALL, 5 )
+		
+		self.m_button_AboutOk = wx.Button( self.m_panel6, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer6.Add( self.m_button_AboutOk, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
+		
+		
+		self.m_panel6.SetSizer( fgSizer6 )
+		self.m_panel6.Layout()
+		fgSizer6.Fit( self.m_panel6 )
+		bSizer3.Add( self.m_panel6, 1, wx.EXPAND |wx.ALL, 5 )
+		
+		
+		self.SetSizer( bSizer3 )
+		self.Layout()
+		
+		self.Centre( wx.BOTH )
+		
+		# Connect Events
+		self.m_button_AboutOk.Bind( wx.EVT_BUTTON, self.About_Ok )
+	
+	def __del__( self ):
+		pass
+	
+	
+	# Virtual event handlers, overide them in your derived class
+	def About_Ok( self, event ):
+		event.Skip()
+	
+

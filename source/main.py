@@ -24,18 +24,30 @@ def prettify_kb(kbytes):                # Convert bytes to the correct unit
 #---------------------------------------------------------------
 #| GUI STUFF                                                   |
 #---------------------------------------------------------------
-class Main_gui_window(main_gui.MainFrame):
+class Main_gui_window(main_gui.MainFrame):                                  # MAIN
     def __init__(self, parent):
         main_gui.MainFrame.__init__(self, parent)
 
     def menu_refresh(self, event):
-        WIMCS.SetTitle("test22222222")
-        WIMCS.SetStatusText("hehehe22222222222")
+        #WIMCS.SetTitle("test22222222")
+        #WIMCS.SetStatusText("hehehe22222222222")
         computer_scan()
 
     def menu_exit(self, event):
-        self.Close()
+        close_answer = wx.MessageBox("Quit program?", "Confirm", wx.YES_NO)
+        if close_answer == wx.YES:
+            self.Close()
 
+    def menu_about(self, parent):
+        WIMCS_about = About_Gui_Window(None)
+        WIMCS_about.Show()
+
+class About_Gui_Window(main_gui.MyDialog_About):                            # ABOUT
+    def __init__(self, parent):
+         main_gui.MyDialog_About.__init__(self, parent)
+
+    def About_Ok(self, parent):
+        self.Close()
 
 #---------------------------------------------------------------
 #| Starting the scan                                           |
