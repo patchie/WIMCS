@@ -49,7 +49,8 @@ Version 0.4 - Only get a overview
 Version 0.5 - Only get a overview, with a installer and binaries
 	* Create installer
 	* Send usage statistics back to the server 
-	* wifi or ethernet, and current speed also with ping
+	* Wifi or ethernet, and current speed also with ping
+	* Add update option
 
 Version 0.6 - Tell the user about the bottlenecks
 	* Check if the user has ssd or hdd

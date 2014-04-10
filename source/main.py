@@ -35,8 +35,6 @@ class Main_gui_window(main_gui.MainFrame):                                  # MA
 
 
     def menu_refresh(self, event):
-        #WIMCS.SetTitle("test22222222")
-        #WIMCS.SetStatusText("hehehe22222222222")
         computer_scan()
 
     def menu_exit(self, event):
@@ -59,8 +57,10 @@ class About_Gui_Window(main_gui.MyDialog_About):                            # AB
 #| THE SCAN                                                    |
 #---------------------------------------------------------------
 def computer_scan():
+    WIMCS.SetStatusText("Scanning computer...")
+
     c = wmi.WMI()   # Retrieving information from VMI
-    for os in c.Win32_OperatingSystem():            # Fetching WMI information from the OS
+    for os in c.Win32_OperatingSystem():            # Fetching information from the OS
         for disk in c.Win32_LogicalDisk(["FreeSpace", "Size", "DriveType"], DriveType=3, DeviceID=os.SystemDrive):
             HdTotalValue = prettify_kb(float(disk.Size)/1024)                               # The disk.Size value comes in bytes, converts to kb before sending
             WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)
@@ -88,7 +88,7 @@ def computer_scan():
         MemoryTotalUsedValue = prettify_kb((float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize)) - (float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles)))
         WIMCS.m_staticText_MemoryTotalUsedValue.SetLabel(MemoryTotalUsedValue)
 
-    for Processor in c.Win32_Processor():           # Fetching WMI information from the Processor
+    for Processor in c.Win32_Processor():           # Fetching information from the Processor
         CpuTypeValue = Processor.Name                                                       # Showing the CPU name
         WIMCS.m_staticText_CpuTypeValue.SetLabel(CpuTypeValue)
 
@@ -100,12 +100,17 @@ def computer_scan():
 
         #WIMCS.m_staticText_CpuTempValue.SetLabel()    # m_staticText_CPUTempValue
 
+
+    for Processes in c.Win32_Process():           # Fetching information from the running processes
+        print Processes.Caption
+
+    WIMCS.SetStatusText("Scanning done")
+
 #---------------------------------------------------------------
 #| NOTIFICATION SERVICE                                        |
 #---------------------------------------------------------------
 def notification_service():
-
-        # Checking if you use more swap memory then you have free physical memory. This can cause a slow computer.
+    # Checking if you use more swap memory then you have free physical memory. This can cause a slow computer.
         swapusedkb = float(os.SizeStoredInPagingFiles) - float(os.FreeSpaceInPagingFiles)
             #print "swapusedkb: ", prettify_kb(float(os.SizeStoredInPagingFiles) - float(os.FreeSpaceInPagingFiles))
         ramfreekb = float(os.FreePhysicalMemory) * 2
@@ -116,6 +121,13 @@ def notification_service():
             print "hehe"
         wx.MessageBox('You use more swap memory then free physical memory.\nThis can cause a slow computer.\n\nYou can solve this problem by closing programs and releasing more memory.', 'Swap memory error!', wx.OK | wx.ICON_ERROR)
 
+    # Less then 20% free diskspace
+
+    # Above 20% cpu load
+
+    # Using more then 80% of physical memory
+
+    # Less then 2 gb memory
 
 #---------------------------------------------------------------
 #| INITIALIZE                                                  |
@@ -124,7 +136,7 @@ if __name__ == '__main__':
     app = wx.App()
     WIMCS = Main_gui_window(None)
     WIMCS.SetTitle("WIMCS " + version)
-    WIMCS.SetStatusText("none..")
+    WIMCS.m_staticText_Version.SetLabel("Version: " + version)
     computer_scan()                 # Start the computer scan
     WIMCS.Show()                    # Shows the window
     app.MainLoop()                  # Starts the application loop
