@@ -53,18 +53,46 @@ class About_Gui_Window(main_gui.MyDialog_About):                            # AB
 #| Starting the scan                                           |
 #---------------------------------------------------------------
 def computer_scan():
-    c = wmi.WMI()   # Running scan on local computer
+    c = wmi.WMI()   # Retrieving information from VMI
 
     for os in c.Win32_OperatingSystem():
         for disk in c.Win32_LogicalDisk(["FreeSpace", "Size", "DriveType"], DriveType=3, DeviceID=os.SystemDrive):
             HdTotalValue = prettify_kb(float(disk.Size)/1024)                               # The disk.Size value comes in bytes, converts to kb before sending
+            WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)                          # Show the value in the gui
+
             HdFreeValue = prettify_kb(float(disk.Freespace)/1024)                           # The disk.Freespace value comes in bytes, converts to kb before sending
+            WIMCS.m_staticText_HdFreeValue.SetLabel(HdFreeValue)                            # Show the value in the gui
+
             HdUsedValue = prettify_kb(float(disk.Size)/1024 - float(disk.Freespace)/1024)   # The disk.Size value comes in bytes, converts to kb before sending
+            WIMCS.m_staticText_HdUsedValue.SetLabel(HdUsedValue)                            # Show the value in the gui
+
+            #WIMCS.m_staticText_HdFragmentedValue.SetLabel()                                # I need to fix this one. Its only supposed to disk defragment if its a HDD, and not a SSD
+
         MemoryPhysicalValue = prettify_kb(os.TotalVisibleMemorySize)                        # Memory cards installed (visible for the OS)
-        MemoryVirtualValue = prettify_kb(os.SizeStoredInPagingFiles)
+        WIMCS.m_staticText_MemoryPhysicalValue.SetLabel(MemoryPhysicalValue)                # Show the value in the gui
+
+        MemoryVirtualValue = prettify_kb(os.SizeStoredInPagingFiles)                        # This is the pagefile
+        WIMCS.m_staticText_MemoryVirtualValue.SetLabel(MemoryVirtualValue)                  # Show the value in the gui
+
         MemoryTotalValue = prettify_kb(float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize))    # Total cards and swap(HDD)
+        WIMCS.m_staticText_MemoryTotalValue.SetLabel(MemoryTotalValue)                                          # Show the value in the gui
+
         MemoryTotalfreeValue = prettify_kb(float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles))     # Total free memory in cards and swap(HDD)
+        WIMCS.m_staticText_MemoryTotalFreeValue.SetLabel(MemoryTotalfreeValue)                                  # Show the value in the gui
+
         MemoryTotalusedValue = prettify_kb((float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize)) - (float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles)))
+        WIMCS.m_staticText_MemoryTotalUsedValue.SetLabel(MemoryTotalusedValue)                                  # Show the value in the gui
+
+
+        #WIMCS.m_staticText_CPUTypeValue.SetLabel()    # m_staticText_CPUTypeValue
+        #WIMCS.m_staticText_CPUSpeedValue.SetLabel()    # m_staticText_CPUSpeedValue
+        #WIMCS.m_staticText_CPULoadValue.SetLabel()    # m_staticText_CPULoadValue
+        #WIMCS.m_staticText_CPUTempValue.SetLabel()    # m_staticText_CPUTempValue
+
+#---------------------------------------------------------------
+#| Starting the notification service                           |
+#---------------------------------------------------------------
+def notification_service():
 
         # Checking if you use more swap memory then you have free physical memory. This can cause a slow computer.
         swapusedkb = float(os.SizeStoredInPagingFiles) - float(os.FreeSpaceInPagingFiles)
@@ -78,19 +106,7 @@ def computer_scan():
         wx.MessageBox('You use more swap memory then free physical memory.\nThis can cause a slow computer.\n\nYou can solve this problem by closing programs and releasing more memory.', 'Swap memory error!', wx.OK | wx.ICON_ERROR)
 
 
-    WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)  # m_staticText_HdTotalValue
-    WIMCS.m_staticText_HdFreeValue.SetLabel(HdFreeValue)    # m_staticText_HdFreeValue
-    WIMCS.m_staticText_HdUsedValue.SetLabel(HdUsedValue)    # m_staticText_HdUsedValue
-    #WIMCS.m_staticText_HdFragmentedValue.SetLabel()    # m_staticText_HdFragmentedValue
-    WIMCS.m_staticText_MemoryPhysicalValue.SetLabel(MemoryPhysicalValue)    # m_staticText_MemoryPhysicalValue
-    WIMCS.m_staticText_MemoryVirtualValue.SetLabel(MemoryVirtualValue)    # m_staticText_MemoryVirtualValue
-    WIMCS.m_staticText_MemoryTotalValue.SetLabel(MemoryTotalValue)    # m_staticText_MemoryTotalValue
-    WIMCS.m_staticText_MemoryTotalfreeValue.SetLabel(MemoryTotalfreeValue)    # m_staticText_MemoryTotalfreeValue
-    WIMCS.m_staticText_MemoryTotalusedValue.SetLabel(MemoryTotalusedValue)    # m_staticText_MemoryTotalusedValue
-    #WIMCS.m_staticText_CPUTypeValue.SetLabel()    # m_staticText_CPUTypeValue
-    #WIMCS.m_staticText_CPUSpeedValue.SetLabel()    # m_staticText_CPUSpeedValue
-    #WIMCS.m_staticText_CPULoadValue.SetLabel()    # m_staticText_CPULoadValue
-    #WIMCS.m_staticText_CPUTempValue.SetLabel()    # m_staticText_CPUTempValue
+
 
 #---------------------------------------------------------------
 #| Initialize                                                  |
