@@ -6,7 +6,12 @@ import main_gui     # Imports the python file with the gui
 import wmi          # Imports the python Windows Management Instrumentation library
 
 #---------------------------------------------------------------
-#| MISC                                                        |
+#| VARIABLES                                                   |
+#---------------------------------------------------------------
+version = "v0.01 Alpha"
+
+#---------------------------------------------------------------
+#| MISC FUNCTIONS                                              |
 #---------------------------------------------------------------
 def prettify_kb(kbytes):                # Convert bytes to the correct unit
 
@@ -27,6 +32,7 @@ def prettify_kb(kbytes):                # Convert bytes to the correct unit
 class Main_gui_window(main_gui.MainFrame):                                  # MAIN
     def __init__(self, parent):
         main_gui.MainFrame.__init__(self, parent)
+
 
     def menu_refresh(self, event):
         #WIMCS.SetTitle("test22222222")
@@ -50,47 +56,52 @@ class About_Gui_Window(main_gui.MyDialog_About):                            # AB
         self.Close()
 
 #---------------------------------------------------------------
-#| Starting the scan                                           |
+#| THE SCAN                                                    |
 #---------------------------------------------------------------
 def computer_scan():
     c = wmi.WMI()   # Retrieving information from VMI
-
-    for os in c.Win32_OperatingSystem():
+    for os in c.Win32_OperatingSystem():            # Fetching WMI information from the OS
         for disk in c.Win32_LogicalDisk(["FreeSpace", "Size", "DriveType"], DriveType=3, DeviceID=os.SystemDrive):
             HdTotalValue = prettify_kb(float(disk.Size)/1024)                               # The disk.Size value comes in bytes, converts to kb before sending
-            WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)                          # Show the value in the gui
+            WIMCS.m_staticText_HdTotalValue.SetLabel(HdTotalValue)
 
             HdFreeValue = prettify_kb(float(disk.Freespace)/1024)                           # The disk.Freespace value comes in bytes, converts to kb before sending
-            WIMCS.m_staticText_HdFreeValue.SetLabel(HdFreeValue)                            # Show the value in the gui
+            WIMCS.m_staticText_HdFreeValue.SetLabel(HdFreeValue)
 
             HdUsedValue = prettify_kb(float(disk.Size)/1024 - float(disk.Freespace)/1024)   # The disk.Size value comes in bytes, converts to kb before sending
-            WIMCS.m_staticText_HdUsedValue.SetLabel(HdUsedValue)                            # Show the value in the gui
+            WIMCS.m_staticText_HdUsedValue.SetLabel(HdUsedValue)
 
             #WIMCS.m_staticText_HdFragmentedValue.SetLabel()                                # I need to fix this one. Its only supposed to disk defragment if its a HDD, and not a SSD
 
         MemoryPhysicalValue = prettify_kb(os.TotalVisibleMemorySize)                        # Memory cards installed (visible for the OS)
-        WIMCS.m_staticText_MemoryPhysicalValue.SetLabel(MemoryPhysicalValue)                # Show the value in the gui
+        WIMCS.m_staticText_MemoryPhysicalValue.SetLabel(MemoryPhysicalValue)
 
         MemoryVirtualValue = prettify_kb(os.SizeStoredInPagingFiles)                        # This is the pagefile
-        WIMCS.m_staticText_MemoryVirtualValue.SetLabel(MemoryVirtualValue)                  # Show the value in the gui
+        WIMCS.m_staticText_MemoryVirtualValue.SetLabel(MemoryVirtualValue)
 
         MemoryTotalValue = prettify_kb(float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize))    # Total cards and swap(HDD)
-        WIMCS.m_staticText_MemoryTotalValue.SetLabel(MemoryTotalValue)                                          # Show the value in the gui
+        WIMCS.m_staticText_MemoryTotalValue.SetLabel(MemoryTotalValue)
 
-        MemoryTotalfreeValue = prettify_kb(float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles))     # Total free memory in cards and swap(HDD)
-        WIMCS.m_staticText_MemoryTotalFreeValue.SetLabel(MemoryTotalfreeValue)                                  # Show the value in the gui
+        MemoryTotalFreeValue = prettify_kb(float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles))     # Total free memory in cards and swap(HDD)
+        WIMCS.m_staticText_MemoryTotalFreeValue.SetLabel(MemoryTotalFreeValue)
 
-        MemoryTotalusedValue = prettify_kb((float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize)) - (float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles)))
-        WIMCS.m_staticText_MemoryTotalUsedValue.SetLabel(MemoryTotalusedValue)                                  # Show the value in the gui
+        MemoryTotalUsedValue = prettify_kb((float(os.SizeStoredInPagingFiles) + float(os.TotalVisibleMemorySize)) - (float(os.FreePhysicalMemory) + float(os.FreeSpaceInPagingFiles)))
+        WIMCS.m_staticText_MemoryTotalUsedValue.SetLabel(MemoryTotalUsedValue)
 
+    for Processor in c.Win32_Processor():           # Fetching WMI information from the Processor
+        CpuTypeValue = Processor.Name                                                       # Showing the CPU name
+        WIMCS.m_staticText_CpuTypeValue.SetLabel(CpuTypeValue)
 
-        #WIMCS.m_staticText_CPUTypeValue.SetLabel()    # m_staticText_CPUTypeValue
-        #WIMCS.m_staticText_CPUSpeedValue.SetLabel()    # m_staticText_CPUSpeedValue
-        #WIMCS.m_staticText_CPULoadValue.SetLabel()    # m_staticText_CPULoadValue
-        #WIMCS.m_staticText_CPUTempValue.SetLabel()    # m_staticText_CPUTempValue
+        CpuSpeedValue = str(Processor.CurrentClockSpeed) + "Mhz"                            # Showing current CPU speed
+        WIMCS.m_staticText_CpuSpeedValue.SetLabel(CpuSpeedValue)
+
+        CpuLoadValue = str(Processor.LoadPercentage) + " %"                                 # Showing the current CPU load
+        WIMCS.m_staticText_CpuLoadValue.SetLabel(CpuLoadValue)
+
+        #WIMCS.m_staticText_CpuTempValue.SetLabel()    # m_staticText_CPUTempValue
 
 #---------------------------------------------------------------
-#| Starting the notification service                           |
+#| NOTIFICATION SERVICE                                        |
 #---------------------------------------------------------------
 def notification_service():
 
@@ -106,15 +117,14 @@ def notification_service():
         wx.MessageBox('You use more swap memory then free physical memory.\nThis can cause a slow computer.\n\nYou can solve this problem by closing programs and releasing more memory.', 'Swap memory error!', wx.OK | wx.ICON_ERROR)
 
 
-
-
 #---------------------------------------------------------------
-#| Initialize                                                  |
+#| INITIALIZE                                                  |
 #---------------------------------------------------------------
 if __name__ == '__main__':
     app = wx.App()
     WIMCS = Main_gui_window(None)
-    WIMCS.SetTitle("WIMCS v0.01 Alpha")
-    WIMCS.SetStatusText("Scanning computer...")
+    WIMCS.SetTitle("WIMCS " + version)
+    WIMCS.SetStatusText("none..")
+    computer_scan()                 # Start the computer scan
     WIMCS.Show()                    # Shows the window
     app.MainLoop()                  # Starts the application loop

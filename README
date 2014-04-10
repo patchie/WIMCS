@@ -40,14 +40,32 @@ To configure WIMCS, open the application and choose "Edit" ->
 
 TODO
 ----
-* Show hd info
-* Show memory info
-* Show CPU info
-* Show running processes
-* Show services
-* Show application in startup
-* Check if the user has ssd or hdd
-* Language files
+Version 0.4 - Only get a overview
+	* Show CPU info
+	* Show running processes
+	* Show services
+	* Show application in start up
+
+Version 0.5 - Only get a overview, with a installer and binaries
+	* Create installer
+	* Send usage statistics back to the server 
+	* wifi or ethernet, and current speed also with ping
+
+Version 0.6 - Tell the user about the bottlenecks
+	* Check if the user has ssd or hdd
+	* Check what OS the user is running
+	* Check if the user is currently running on battery
+
+Version 0.7 - Tell the user what to do about the bottlenecks
+	* Language files
+
+Version 0.8 - Tell the user what to buy to fix the problem
+
+Version 0.9 - Ready for betatesting
+
+Version 1.0 - Ready for the masses
+
+
 
 MAINTAINERS
 -----------
